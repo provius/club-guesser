@@ -1,11 +1,15 @@
 # Club Guesser migration
 
-Status: draft 1, 17 November 2026
+Status: draft 2, 18 November 2026, owner decisions applied
 Platform API: 1
 Registry entry: id `club-guesser` in interactiv-games `docs/registry/games.json`
 Written against interactiv-games `docs/PLATFORM-SPEC.md` draft 1. Spec changes needed are listed in interactiv-games `docs/SPEC-FEEDBACK.md`.
 
 Read for this draft: README.md, `functions/index.js`, `functions/src/api.js`, `functions/src/game.js`, `firestore.rules`, `firebase.json` and the file list. Not read in full: `scoring.js`, `public/app.js`, `scripts/build-dataset.js`, the tests.
+
+## Owner decisions, 18 November 2026
+
+- Quiz scoring shape, S7 and O16: a game can offer one free play each day that earns points, and further plays cost points. For this game a play is a game of rounds. The payout, the cost of an extra play and any earn cap stay null until decided.
 
 ## 1. Summary and target model and tier
 
