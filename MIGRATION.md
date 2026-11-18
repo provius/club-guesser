@@ -9,6 +9,7 @@ Read for this draft: README.md, `functions/index.js`, `functions/src/api.js`, `f
 
 ## Owner decisions, 18 November 2026
 
+- Points economy numbers decided on 18 November, see docs/ECONOMY.md in provius/interactiv-games and the manifest draft below.
 - Quiz scoring shape, S7 and O16: a game can offer one free play each day that earns points, and further plays cost points. For this game a play is a game of rounds. The payout, the cost of an extra play and any earn cap stay null until decided.
 
 ## 1. Summary and target model and tier
@@ -72,8 +73,10 @@ Plain web UI. The browser app is a small vanilla script of about 105 lines. Rebu
   "minAgeLevel": 1,
   "sessionModel": "settle-once",
   "exclusive": true,
-  "stake": { "min": null, "max": null },
-  "caps": { "maxWinPoints": null, "maxWinMultiple": null, "maxActionsPerSecond": null },
+  "stake": { "min": 10, "max": 10 },
+  "freePlay": { "perDay": 1, "maxWinPoints": 5 },
+  "extraPlays": { "perDay": 10 },
+  "caps": { "maxWinPoints": 10, "maxWinMultiple": null, "maxActionsPerSecond": null },
   "service": { "tier": "functions", "name": "clubGuesser", "recoveryHook": "clubGuesserRecover" },
   "dataNamespace": "games/club-guesser",
   "leakTests": true
