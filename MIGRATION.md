@@ -10,7 +10,7 @@ Read for this draft: README.md, `functions/index.js`, `functions/src/api.js`, `f
 ## Owner decisions, 18 November 2026
 
 - Points economy numbers decided on 18 November, see docs/ECONOMY.md in provius/interactiv-games and the manifest draft below.
-- Quiz scoring shape, S7 and O16: a game can offer one free play each day that earns points, and further plays cost points. For this game a play is a game of rounds. The payout, the cost of an extra play and any earn cap stay null until decided.
+- Payout curve decided on 19 November, ADR 0022. A play is a game of 5 rounds at one difficulty level, with 1 free play a day. Easy pays nothing. Medium: a free play pays up to 5, an extra play costs 10 and pays up to 20. Hard doubles the points: a free play pays up to 10, an extra play costs 10 and pays up to 40. The payout rises in a straight line with the total score and reaches the top at 70 percent of the maximum. There is no earn cap.
 
 ## 1. Summary and target model and tier
 
@@ -43,8 +43,8 @@ The game is already on the right side of the platform's main rule. Rounds are st
 ## 4. What moves server side
 
 - The seen clubs list, from the client to the server.
-- Opening and closing the platform session. One session covers a game of rounds. The number of rounds in a game is a game design number and is null for now.
-- The mapping from score to platform points. Not decided. The formula gives up to 1000 times factors per round, which is a game score and not a points amount. See S7 and O16. The payout stays null until decided.
+- Opening and closing the platform session. One session covers a game of 5 rounds.
+- The mapping from score to platform points. The round formula stays as it is: 1000 times the difficulty multiplier, cut by hints, time and wrong guesses. The platform payout is the play's total score divided by the top score, which is 70 percent of 5 rounds times 1000 times the multiplier, so 5,250 for Medium and 8,750 for Hard, capped at 1 and multiplied by the top payout, rounded down. Rounds not played score 0. The server computes the payout at close and Easy never opens a wallet session.
 - Timing already uses the server start time. Keep it, and read the server clock only.
 
 ## 5. Data to carry over or drop
@@ -76,7 +76,12 @@ Plain web UI. The browser app is a small vanilla script of about 105 lines. Rebu
   "stake": { "min": 10, "max": 10 },
   "freePlay": { "perDay": 1, "maxWinPoints": 5 },
   "extraPlays": { "perDay": 10 },
-  "caps": { "maxWinPoints": 10, "maxWinMultiple": null, "maxActionsPerSecond": null },
+  "modes": {
+    "easy": null,
+    "medium": { "stake": { "min": 10, "max": 10 }, "freePlay": { "maxWinPoints": 5 }, "caps": { "maxWinPoints": 10 } },
+    "hard": { "stake": { "min": 10, "max": 10 }, "freePlay": { "maxWinPoints": 10 }, "caps": { "maxWinPoints": 30 } }
+  },
+  "caps": { "maxWinPoints": 30, "maxWinMultiple": null, "maxActionsPerSecond": null },
   "service": { "tier": "functions", "name": "clubGuesser", "recoveryHook": "clubGuesserRecover" },
   "dataNamespace": "games/club-guesser",
   "leakTests": true
@@ -108,7 +113,7 @@ Plain web UI. The browser app is a small vanilla script of about 105 lines. Rebu
 
 ## 11. Risks and open questions
 
-- Score to points mapping and earn caps, O16.
-- The number of rounds in a game and the lease length, S1.
+- Hard extra plays cost 10 and pay up to 40, so a Hard extra play breaks even at 17.5 percent of the maximum score and ten a day could win 300 points. This makes Hard the most profitable game in the quiz set. Watch it in beta. Bot play is handled by the terms and by bans, O22.
+- The lease length, S1.
 - Fame ratings are a guess today. A weak difficulty curve makes the points inflow unpredictable.
 - Easy mode shows four choices from elite clubs, so a bot with the dataset can win it. Rate limits and timing floors are the only defence. Accept and monitor.
