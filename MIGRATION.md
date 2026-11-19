@@ -10,7 +10,7 @@ Read for this draft: README.md, `functions/index.js`, `functions/src/api.js`, `f
 ## Owner decisions, 18 November 2026
 
 - Points economy numbers decided on 18 November, see docs/ECONOMY.md in provius/interactiv-games and the manifest draft below.
-- Payout curve decided on 19 November, ADR 0022. A play is a game of 5 rounds at one difficulty level, with 1 free play a day. Easy pays nothing. Medium: a free play pays up to 5, an extra play costs 10 and pays up to 20. Hard doubles the points: a free play pays up to 10, an extra play costs 10 and pays up to 40. The payout rises in a straight line with the total score and reaches the top at 70 percent of the maximum. There is no earn cap.
+- Payout curve decided on 19 November, ADR 0022. A play is a game of 5 rounds at one difficulty level, with 1 free play a day and at most 5 extra plays a day until there is data. Easy pays nothing. Medium: a free play pays up to 5, an extra play costs 10 and pays up to 20. Hard doubles the points: a free play pays up to 10, an extra play costs 10 and pays up to 40. The payout rises in a straight line with the total score and reaches the top at 70 percent of the maximum. There is no earn cap.
 
 ## 1. Summary and target model and tier
 
@@ -75,7 +75,7 @@ Plain web UI. The browser app is a small vanilla script of about 105 lines. Rebu
   "exclusive": true,
   "stake": { "min": 10, "max": 10 },
   "freePlay": { "perDay": 1, "maxWinPoints": 5 },
-  "extraPlays": { "perDay": 10 },
+  "extraPlays": { "perDay": 5 },
   "modes": {
     "easy": null,
     "medium": { "stake": { "min": 10, "max": 10 }, "freePlay": { "maxWinPoints": 5 }, "caps": { "maxWinPoints": 10 } },
@@ -113,7 +113,7 @@ Plain web UI. The browser app is a small vanilla script of about 105 lines. Rebu
 
 ## 11. Risks and open questions
 
-- Hard extra plays cost 10 and pay up to 40, so a Hard extra play breaks even at 17.5 percent of the maximum score and ten a day could win 300 points. This makes Hard the most profitable game in the quiz set. Watch it in beta. Bot play is handled by the terms and by bans, O22.
+- Hard extra plays cost 10 and pay up to 40, so a Hard extra play breaks even at 17.5 percent of the maximum score. Extra plays are capped at 5 a day until there is data, so Hard extra plays could win up to 150 points a day. This makes Hard the most profitable game in the quiz set. Watch it in beta. Bot play is handled by the terms and by bans, O22.
 - The lease length, S1.
 - Fame ratings are a guess today. A weak difficulty curve makes the points inflow unpredictable.
 - Easy mode shows four choices from elite clubs, so a bot with the dataset can win it. Rate limits and timing floors are the only defence. Accept and monitor.
